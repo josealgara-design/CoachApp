@@ -1,0 +1,132 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  COACH
+  CLIENT
+}
+
+enum GoalStatus {
+  ACTIVE
+  DONE
+  ARCHIVED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role
+  createdAt    DateTime @default(now())
+
+  // Set only for CLIENT users; points at their coach
+  coachId String?
+  coach   User?   @relation("CoachClients", fields: [coachId], references: [id])
+  clients User[]  @relation("CoachClients")
+
+  goals            Goal[]       @relation("ClientGoals")
+  actionItems      ActionItem[] @relation("ClientActionItems")
+  sessionsAsCoach  Session[]    @relation("CoachSessions")
+  sessionsAsClient Session[]    @relation("ClientSessions")
+  profile          Profile?
+  articles         Article[]    @relation("CoachArticles")
+  articlePins      ArticlePin[] @relation("ClientArticlePins")
+}
+
+model Goal {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  status      GoalStatus @default(ACTIVE)
+  targetDate  DateTime?
+  createdAt   DateTime   @default(now())
+
+  clientId String
+  client   User   @relation("ClientGoals", fields: [clientId], references: [id])
+
+  actionItems ActionItem[]
+}
+
+model ActionItem {
+  id      String    @id @default(cuid())
+  title   String
+  done    Boolean   @default(false)
+  dueDate DateTime?
+
+  clientId String
+  client   User   @relation("ClientActionItems", fields: [clientId], references: [id])
+
+  goalId String?
+  goal   Goal?   @relation(fields: [goalId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Session {
+  id      String   @id @default(cuid())
+  date    DateTime @default(now())
+  notes   String
+  summary String?
+
+  coachId String
+  coach   User   @relation("CoachSessions", fields: [coachId], references: [id])
+
+  clientId String
+  client   User   @relation("ClientSessions", fields: [clientId], references: [id])
+}
+
+model Profile {
+  id       String @id @default(cuid())
+  clientId String @unique
+  client   User   @relation(fields: [clientId], references: [id])
+
+  yearsExperience      Int?
+  careerGoal           String?
+  careerGoalTargetDate DateTime?
+
+  resumeFileName   String?
+  resumeStoredName String?
+  resumeMimeType   String?
+  resumeSize       Int?
+  resumeUploadedAt DateTime?
+
+  quizScores      Json?
+  quizCompletedAt DateTime?
+
+  updatedAt DateTime @updatedAt
+}
+
+model Article {
+  id          String   @id @default(cuid())
+  coachId     String
+  coach       User     @relation("CoachArticles", fields: [coachId], references: [id])
+  title       String
+  url         String
+  description String?
+  tags        Json
+  createdAt   DateTime @default(now())
+
+  pins ArticlePin[]
+}
+
+model ArticlePin {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  clientId  String
+  client    User     @relation("ClientArticlePins", fields: [clientId], references: [id])
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@unique([articleId, clientId])
+}
