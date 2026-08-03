@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { verifyClientSession, getCurrentUser } from "@/lib/dal";
 import { logout } from "@/app/actions/auth";
+import { Wordmark } from "@/components/Wordmark";
 
 export default async function ClientLayout({ children }: { children: React.ReactNode }) {
   await verifyClientSession();
@@ -10,9 +11,9 @@ export default async function ClientLayout({ children }: { children: React.React
     <div className="min-h-screen bg-slate-50">
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-          <nav className="flex items-center gap-4">
-            <Link href="/client" className="font-semibold text-slate-900">
-              My coaching
+          <nav className="flex items-center gap-5">
+            <Link href="/client">
+              <Wordmark tagline="client portal" />
             </Link>
             <Link href="/client/profile" className="text-sm font-medium text-slate-600 hover:text-slate-900">
               My profile

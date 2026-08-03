@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { readSession } from "@/lib/session";
+import { Wordmark } from "@/components/Wordmark";
 
 export default async function Home() {
   const session = await readSession();
@@ -10,7 +11,8 @@ export default async function Home() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center gap-6 px-4 text-center">
-      <h1 className="text-3xl font-semibold text-slate-900">Career Coaching</h1>
+      <Wordmark tagline="find | launch | grow" size="lg" />
+      <h1 className="text-2xl font-semibold text-slate-900">Career Coaching Portal</h1>
       <p className="text-slate-600">
         A shared workspace for coaches and clients to track goals, action items, and session
         notes.

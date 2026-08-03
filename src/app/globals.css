@@ -1,26 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fdfbf7;
+  --foreground: #2c3e50;
+}
+
+/*
+ * Re-tint Tailwind's `slate` scale to match v3tta.com's palette (pulled
+ * directly from that site's source: cream backgrounds, navy brand color).
+ * Every existing `bg-slate-*` / `text-slate-*` / `border-slate-*` class in
+ * the app picks this up automatically -- no per-component changes needed.
+ */
+@theme {
+  --color-slate-50: #fdfbf7;
+  --color-slate-100: #f5f1e8;
+  --color-slate-700: #3d4f5c;
+  --color-slate-900: #2c3e50;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
