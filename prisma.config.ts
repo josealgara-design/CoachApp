@@ -6,7 +6,7 @@ import { defineConfig } from "prisma/config";
 
 // Mirrors Next.js's env precedence: .env.local (real values, gitignored,
 // created by `vercel env pull`) wins over .env (committed placeholders).
-config({ path: existsSync(".env.local") ? ".env.local" : ".env" });
+config({ path: existsSync(".env.local") ? ".env.local" : ".env", quiet: true });
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
