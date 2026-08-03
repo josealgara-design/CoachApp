@@ -52,3 +52,6 @@ next-env.d.ts
 
 # uploaded resumes
 /uploads
+
+.vercel
+.env*.local
