@@ -17,12 +17,18 @@ export default async function Home() {
         A shared workspace for coaches and clients to track goals, action items, and session
         notes.
       </p>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap justify-center gap-3">
         <Link
           href="/login"
           className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
         >
           Sign in
+        </Link>
+        <Link
+          href="/client-signup"
+          className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50"
+        >
+          Sign up as a client
         </Link>
         <Link
           href="/signup"

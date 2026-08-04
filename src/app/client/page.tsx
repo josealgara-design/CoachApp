@@ -52,6 +52,17 @@ export default async function ClientPage() {
         </Link>
       )}
 
+      <a
+        href="https://v3tta.com/assessment.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600 hover:border-slate-300"
+      >
+        <span className="font-medium text-slate-900">Take the Career Assessment</span> — V3TTA&apos;s
+        20-question assessment across strengths, execution, resilience, connection, and vision.
+        Opens in a new tab.
+      </a>
+
       <section className="flex flex-col gap-3">
         <h2 className="text-sm font-semibold text-slate-900">My goals</h2>
         <ul className="flex flex-col gap-2">

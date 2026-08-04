@@ -20,9 +20,13 @@ export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const role = await readRole(request);
 
-  const isAuthPage = pathname === "/login" || pathname === "/signup";
+  // Note: match "/client" exactly or "/client/..." -- NOT startsWith("/client"),
+  // which would also swallow the unrelated public "/client-signup" route.
+  const isClientRoute = pathname === "/client" || pathname.startsWith("/client/");
+  const isCoachRoute = pathname === "/coach" || pathname.startsWith("/coach/");
+  const isAuthPage = pathname === "/login" || pathname === "/signup" || pathname === "/client-signup";
 
-  if (!role && (pathname.startsWith("/coach") || pathname.startsWith("/client"))) {
+  if (!role && (isCoachRoute || isClientRoute)) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -30,11 +34,11 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL(role === "COACH" ? "/coach" : "/client", request.url));
   }
 
-  if (role === "CLIENT" && pathname.startsWith("/coach")) {
+  if (role === "CLIENT" && isCoachRoute) {
     return NextResponse.redirect(new URL("/client", request.url));
   }
 
-  if (role === "COACH" && pathname.startsWith("/client")) {
+  if (role === "COACH" && isClientRoute) {
     return NextResponse.redirect(new URL("/coach", request.url));
   }
 
@@ -42,5 +46,5 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/coach/:path*", "/client/:path*", "/login", "/signup"],
+  matcher: ["/coach/:path*", "/client/:path*", "/login", "/signup", "/client-signup"],
 };
