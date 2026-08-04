@@ -5,6 +5,7 @@ import { addGoal, addActionItem, addSessionNote, pinArticle, unpinArticle } from
 import { ActionItemToggle } from "@/app/coach/ActionItemToggle";
 import { GoalStatusSelect } from "@/app/coach/GoalStatusSelect";
 import { ClientProfileSection } from "@/app/coach/ClientProfileSection";
+import { RemoveClientButton } from "@/app/coach/RemoveClientButton";
 import type { TraitScores } from "@/lib/quiz";
 import { parseTags } from "@/lib/article-tags";
 
@@ -40,9 +41,12 @@ export default async function ClientDetailPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900">{client.name}</h1>
-        <p className="text-sm text-slate-500">{client.email}</p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-semibold text-slate-900">{client.name}</h1>
+          <p className="text-sm text-slate-500">{client.email}</p>
+        </div>
+        <RemoveClientButton clientId={clientId} clientName={client.name} />
       </div>
 
       <ClientProfileSection

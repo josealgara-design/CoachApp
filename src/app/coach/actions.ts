@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { verifyCoachSession } from "@/lib/dal";
 import { hashPassword } from "@/lib/password";
@@ -67,6 +68,23 @@ export async function addClient(
 
   revalidatePath("/coach");
   return { error: "", tempPassword };
+}
+
+export async function deleteClient(clientId: string) {
+  const session = await verifyCoachSession();
+  await assertOwnsClient(session.userId, clientId);
+
+  await prisma.$transaction([
+    prisma.articlePin.deleteMany({ where: { clientId } }),
+    prisma.actionItem.deleteMany({ where: { clientId } }),
+    prisma.goal.deleteMany({ where: { clientId } }),
+    prisma.session.deleteMany({ where: { clientId } }),
+    prisma.profile.deleteMany({ where: { clientId } }),
+    prisma.user.delete({ where: { id: clientId } }),
+  ]);
+
+  revalidatePath("/coach");
+  redirect("/coach");
 }
 
 export async function addGoal(formData: FormData) {
